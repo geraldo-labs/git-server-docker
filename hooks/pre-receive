@@ -1,0 +1,40 @@
+#!/bin/sh
+
+#
+#	This pre-receive hook will validate tags
+#
+
+validate_ref()
+{
+	oldrev=$(git rev-parse $1)
+	newrev=$(git rev-parse $2)
+	refname="$3"
+
+	case "$refname" in
+		refs/heads/*)
+			echo >&2 "*** Operations with branches are not permitted. ***"
+      exit 1
+			;;
+		refs/tags/*)
+			tag=$(expr "$refname" : "refs/tags/\(.*\)")
+			echo "Validate privileges..."
+			echo ""
+      echo "Tag $tag accepted"
+			;;
+		*)
+			fail=1
+			echo >&2 "*** Direct pushes are permitted in this repository. ***"
+			;;
+	esac
+}
+
+fail=""
+
+while read oldrev newrev refname
+do
+  validate_ref $oldrev $newrev $refname
+done
+
+if [ -n "$fail" ]; then
+	exit $fail
+fi
