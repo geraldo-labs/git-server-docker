@@ -1,0 +1,7 @@
+apiVersion: v2
+name: git-server-docker
+description: Mini gitserver
+type: application
+version: 0.1.0
+appVersion: 1.17.7-alpine
+icon: "https://symbols.getvecta.com/stencil_83/36_helm-icon.f462ac8ca2.svg"

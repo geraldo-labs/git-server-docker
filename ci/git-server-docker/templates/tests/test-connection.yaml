@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "git-server-docker.fullname" . }}-test-connection"
+  labels:
+{{ include "git-server-docker.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['{{ include "git-server-docker.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
